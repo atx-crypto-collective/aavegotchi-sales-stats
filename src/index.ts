@@ -1,6 +1,7 @@
 import fetch from 'node-fetch';
-import { gql } from 'graphql-tag';
 import { formatDistanceStrict } from 'date-fns';
+import { DocumentNode } from 'graphql';
+import { getRecentClosedPortalSalesQuery } from './queries';
 
 interface RecentClosedPortalSalesResponse {
   data: {
@@ -14,22 +15,7 @@ interface Sale {
   timePurchased: string;
 }
 
-const getRecentClosedPortalSales = async () => {
-  const query = gql`
-    {
-      recentClosedPortalSales: erc721Listings(
-        first: 150
-        where: { category: 0, timePurchased_gt: 0 }
-        orderBy: timePurchased
-        orderDirection: desc
-      ) {
-        id
-        priceInWei
-        timePurchased
-      }
-    }
-  `;
-
+const queryAavegotchiSubgraph = async <Data>(query: DocumentNode) => {
   const res = await fetch(
     'https://aavegotchi.stakesquid-frens.gq/subgraphs/name/aavegotchi/aavegotchi-core-matic',
     {
@@ -38,13 +24,15 @@ const getRecentClosedPortalSales = async () => {
     }
   );
 
-  const { data } = (await res.json()) as RecentClosedPortalSalesResponse;
+  const { data } = (await res.json()) as Data;
 
   return data.recentClosedPortalSales;
 };
 
 (async () => {
-  const recentSales = await getRecentClosedPortalSales();
+  const recentSales = await queryAavegotchiSubgraph<RecentClosedPortalSalesResponse>(
+    getRecentClosedPortalSalesQuery
+  );
   const numberOfSales = recentSales.length;
   const totalSalesAmount = recentSales.reduce(
     (total, sale) => total + parseInt(sale.priceInWei, 10) / 1e18,
