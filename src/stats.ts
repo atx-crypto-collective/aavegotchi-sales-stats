@@ -1,11 +1,14 @@
 import { formatDistanceStrict } from 'date-fns';
 import { queryAavegotchiSubgraph } from './api';
-import { getRecentClosedPortalSalesQuery, RecentClosedPortalSalesResponse } from './queries';
+import {
+  getRecentClosedPortalSalesQuery,
+  GetRecentClosedPortalSalesQueryResponse,
+} from './queries';
 
 export const getRecentClosedPortalSalesStats = async () => {
   const {
     recentClosedPortalSales: recentSales,
-  } = await queryAavegotchiSubgraph<RecentClosedPortalSalesResponse>(
+  } = await queryAavegotchiSubgraph<GetRecentClosedPortalSalesQueryResponse>(
     getRecentClosedPortalSalesQuery
   );
 

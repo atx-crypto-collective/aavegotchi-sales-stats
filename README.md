@@ -23,8 +23,8 @@ Install dependencies:
 $ yarn
 ```
 
-Get recent sales stats:
+Get stats:
 
 ```sh
-$ yarn recent-sales
+$ yarn stats
 ```

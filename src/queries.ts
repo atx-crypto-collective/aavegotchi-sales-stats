@@ -1,7 +1,7 @@
 import { gql } from 'graphql-tag';
 import { Sale } from './types';
 
-export interface RecentClosedPortalSalesResponse {
+export interface GetRecentClosedPortalSalesQueryResponse {
   recentClosedPortalSales: Sale[];
 }
 

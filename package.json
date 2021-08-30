@@ -4,7 +4,7 @@
   "description": "Calculate and visualize recent Aavegotchi sales stats.",
   "main": "./src/index.ts",
   "scripts": {
-    "recent-sales": "ts-node ./src/index.ts"
+    "stats": "ts-node ./src/index.ts"
   },
   "author": "ATX Crypto Collective",
   "license": "MIT",
