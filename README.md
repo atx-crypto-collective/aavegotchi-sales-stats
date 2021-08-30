@@ -4,7 +4,7 @@ Calculate and visualize recent Aavegotchi sales stats.
 
 ## Requirements
 
-- [Node](https://nodejs.org/en/) version ^12.x ([nvm](https://github.com/nvm-sh/nvm) recommended)
+- [Node](https://nodejs.org/en/) version ^14.x ([nvm](https://github.com/nvm-sh/nvm) recommended)
 - [Yarn](https://yarnpkg.com/) version ^1.22.x
 
 ## Setup
@@ -26,5 +26,5 @@ $ yarn
 Get recent sales stats:
 
 ```sh
-$ yarn sales
+$ yarn recent-sales
 ```
