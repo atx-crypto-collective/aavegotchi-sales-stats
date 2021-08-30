@@ -1,4 +1,9 @@
 import { gql } from 'graphql-tag';
+import { Sale } from './types';
+
+export interface RecentClosedPortalSalesResponse {
+  recentClosedPortalSales: Sale[];
+}
 
 export const getRecentClosedPortalSalesQuery = gql`
   {
