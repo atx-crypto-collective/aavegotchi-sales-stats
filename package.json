@@ -1,0 +1,21 @@
+{
+  "name": "aavegotchi-sales-stats",
+  "version": "1.0.0",
+  "description": "Calculate and visualize recent Aavegotchi sales stats.",
+  "main": "index.ts",
+  "scripts": {
+    "sales": "ts-node index.ts"
+  },
+  "author": "ATX Crypto Collective",
+  "license": "MIT",
+  "dependencies": {
+    "date-fns": "^2.23.0",
+    "node-fetch": "^2.6.1"
+  },
+  "devDependencies": {
+    "@types/node": "^16.7.6",
+    "@types/node-fetch": "^2.5.12",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.2"
+  }
+}
