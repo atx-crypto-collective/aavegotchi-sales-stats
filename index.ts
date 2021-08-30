@@ -1,38 +1,50 @@
 import fetch from 'node-fetch';
+import { gql } from 'graphql-tag';
 import { formatDistanceStrict } from 'date-fns';
 
-interface Sale {
-  category: string;
-  gotchi: null;
-  id: string;
-  priceInWei: string;
-  seller: string;
-  timePurchased: string;
-  tokenId: string;
-}
-
-interface RecentClosedGotchiPortalSalesResponse {
+interface RecentClosedPortalSalesResponse {
   data: {
-    erc721Listings: Sale[];
+    recentClosedPortalSales: Sale[];
   };
 }
 
-const getRecentClosedGotchiPortalSales = async (numberOfSales: number) => {
+interface Sale {
+  id: string;
+  priceInWei: string;
+  timePurchased: string;
+}
+
+const getRecentClosedPortalSales = async () => {
+  const query = gql`
+    {
+      recentClosedPortalSales: erc721Listings(
+        first: 150
+        where: { category: 0, timePurchased_gt: 0 }
+        orderBy: timePurchased
+        orderDirection: desc
+      ) {
+        id
+        priceInWei
+        timePurchased
+      }
+    }
+  `;
+
   const res = await fetch(
     'https://aavegotchi.stakesquid-frens.gq/subgraphs/name/aavegotchi/aavegotchi-core-matic',
     {
       method: 'POST',
-      body: `{"query":"\\n  {erc721Listings(first:${numberOfSales}, where:{category:0,timePurchased_gt:0}, orderBy:timePurchased, orderDirection:desc) {\\n\\n    id\\n    tokenId\\n    category\\n    priceInWei\\n    seller\\n    timePurchased\\n    gotchi {\\n  id\\n  name\\n  collateral\\n  modifiedNumericTraits\\n  stakedAmount\\n  hauntId\\n  kinship\\n  modifiedRarityScore\\n  baseRarityScore\\n  level\\n  experience\\n  owner {\\n    id\\n  }\\n    }\\n}}\\n"}`,
+      body: JSON.stringify({ query: query.loc.source.body }),
     }
   );
 
-  const { data } = (await res.json()) as RecentClosedGotchiPortalSalesResponse;
+  const { data } = (await res.json()) as RecentClosedPortalSalesResponse;
 
-  return data.erc721Listings;
+  return data.recentClosedPortalSales;
 };
 
 (async () => {
-  const recentSales = await getRecentClosedGotchiPortalSales(150);
+  const recentSales = await getRecentClosedPortalSales();
   const numberOfSales = recentSales.length;
   const totalSalesAmount = recentSales.reduce(
     (total, sale) => total + parseInt(sale.priceInWei, 10) / 1e18,
