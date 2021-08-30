@@ -1,4 +1,4 @@
-import nodeFetch from 'node-fetch';
+import fetch from 'node-fetch';
 import { formatDistanceStrict } from 'date-fns';
 
 interface Sale {
@@ -18,7 +18,7 @@ interface RecentClosedGotchiPortalSalesResponse {
 }
 
 const getRecentClosedGotchiPortalSales = async (numberOfSales: number) => {
-  const res = await nodeFetch(
+  const res = await fetch(
     'https://aavegotchi.stakesquid-frens.gq/subgraphs/name/aavegotchi/aavegotchi-core-matic',
     {
       method: 'POST',
@@ -28,14 +28,14 @@ const getRecentClosedGotchiPortalSales = async (numberOfSales: number) => {
 
   const { data } = (await res.json()) as RecentClosedGotchiPortalSalesResponse;
 
-  return data;
+  return data.erc721Listings;
 };
 
 (async () => {
-  const { erc721Listings: recentSales } = await getRecentClosedGotchiPortalSales(150);
+  const recentSales = await getRecentClosedGotchiPortalSales(150);
   const numberOfSales = recentSales.length;
   const totalSalesAmount = recentSales.reduce(
-    (total: number, sale) => total + parseInt(sale.priceInWei, 10) / 1e18,
+    (total, sale) => total + parseInt(sale.priceInWei, 10) / 1e18,
     0
   );
   const averageSalePrice = (totalSalesAmount / numberOfSales).toFixed(2);
