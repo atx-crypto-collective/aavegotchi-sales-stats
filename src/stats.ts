@@ -1,4 +1,3 @@
-import { formatDistanceStrict } from 'date-fns';
 import { queryAavegotchiSubgraph } from './api';
 import {
   getRecentClosedPortalSalesQuery,
@@ -20,9 +19,6 @@ export const getRecentClosedPortalSalesStats = async () => {
   const highestSalePrice = Math.max(...salePrices);
   const medianSalePrice = median(salePrices);
   const averageSalePrice = Math.round(totalSalesAmount / numberOfSales);
-  const oldestSale = recentSales[recentSales.length - 1];
-  const oldestSaleDate = new Date(parseInt(oldestSale.timePurchased, 10) * 1000);
-  const timeframe = formatDistanceStrict(oldestSaleDate, new Date());
 
   return {
     numberOfSales,
@@ -30,6 +26,5 @@ export const getRecentClosedPortalSalesStats = async () => {
     highestSalePrice,
     medianSalePrice,
     averageSalePrice,
-    timeframe,
   };
 };

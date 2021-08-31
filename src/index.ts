@@ -6,10 +6,9 @@ const {
   highestSalePrice,
   medianSalePrice,
   averageSalePrice,
-  timeframe,
 } = await getRecentClosedPortalSalesStats();
 
-console.log(`${numberOfSales} closed gotchi portals sold in the last ${timeframe}\n`);
+console.log(`${numberOfSales} closed gotchi portals sold in the last 24 hours\n`);
 console.log(`average price | ${averageSalePrice.toLocaleString('en-US')} $GHST`);
 console.log(`median price  | ${medianSalePrice.toLocaleString('en-US')} $GHST`);
 console.log(`lowest price  | ${lowestSalePrice.toLocaleString('en-US')} $GHST`);
