@@ -4,6 +4,7 @@ import {
   getRecentClosedPortalSalesQuery,
   GetRecentClosedPortalSalesQueryResponse,
 } from './queries';
+import { median } from './utils';
 
 export const getRecentClosedPortalSalesStats = async () => {
   const {
@@ -13,18 +14,22 @@ export const getRecentClosedPortalSalesStats = async () => {
   );
 
   const numberOfSales = recentSales.length;
-  const totalSalesAmount = recentSales.reduce(
-    (total, sale) => total + parseInt(sale.priceInWei, 10) / 1e18,
-    0
-  );
-  const averageSalePrice = (totalSalesAmount / numberOfSales).toFixed(2);
+  const salePrices = recentSales.map((sale) => parseInt(sale.priceInWei, 10) / 1e18);
+  const totalSalesAmount = salePrices.reduce((total, price) => total + price, 0);
+  const lowestSalePrice = Math.min(...salePrices);
+  const highestSalePrice = Math.max(...salePrices);
+  const medianSalePrice = median(salePrices);
+  const averageSalePrice = Math.round(totalSalesAmount / numberOfSales);
   const oldestSale = recentSales[recentSales.length - 1];
   const oldestSaleDate = new Date(parseInt(oldestSale.timePurchased, 10) * 1000);
   const timeframe = formatDistanceStrict(oldestSaleDate, new Date());
 
   return {
     numberOfSales,
-    timeframe,
+    lowestSalePrice,
+    highestSalePrice,
+    medianSalePrice,
     averageSalePrice,
+    timeframe,
   };
 };
